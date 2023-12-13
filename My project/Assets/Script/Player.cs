@@ -6,11 +6,20 @@ public class Player : MonoBehaviour
 {
     #region 변수입니다.
     public float speed = 2;
+    public float MaxHP = 100;
+    public float CurrentHP = 100;
+    private bool isHit = false;
+
+    public int MaxAmmo = 10;
+    public int CurrentAmmo = 10;
+
     Animator anim;
     CharacterController cc;
+
     public AudioClip fireSound;
     public GameObject bullet;
-    public Transform Shotpoint;
+    public Transform Shootpoint;
+    public GameObject fire;
     #endregion
 
     private void Awake()
@@ -23,17 +32,40 @@ public class Player : MonoBehaviour
     {
         Move();
         Shot();
+        Reload();
+    }
+
+    void Reload()
+    {
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            //에니메이션 재장전
+            CurrentAmmo = MaxAmmo;
+        }
     }
 
     void Shot()
     {
-        if (Input.GetMouseButtonDown(0))
+        if(CurrentAmmo > 0)
         {
-            anim.SetTrigger("Shot");
+            if (Input.GetMouseButtonDown(0))
+            {
+                anim.SetTrigger("Shot");
 
-            SoundManager.instance.SFXPlay("fireSound", fireSound);
+                SoundManager.instance.SFXPlay("fireSound", fireSound);
 
-            Instantiate(bullet, Shotpoint.transform.position, transform.rotation);
+                Instantiate(bullet, Shootpoint.transform.position, Camera.main.transform.rotation);
+
+                SoundManager.instance.VFXPlay(fire, Shootpoint.transform.position, 0.3f);
+
+                CurrentAmmo--;
+            }
+        }
+        else
+        {
+            //발사가 안될 때
+            //방아쇠만 당기는 사운드 재생
+            //UI로 표시
         }
     }
 
@@ -60,6 +92,24 @@ public class Player : MonoBehaviour
         dir = Camera.main.transform.TransformDirection(dir);
 
         cc.Move(dir * speed * Time.deltaTime);
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if(hit.collider.tag == "Enemy")
+        {
+            if(!isHit)
+            {
+                CurrentHP -= 10;
+                isHit = true;
+                Invoke("Mujuck", 2f);
+            }
+        }
+    }
+
+    void Mujuck()
+    {
+        isHit = false;
     }
 
     //private void Update()

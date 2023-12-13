@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float speed = 5;
+    public int damage = 10;
+
+    private void Start()
+    {
+        Destroy(this.gameObject, 3f);
+    }
+
+    public float speed = 10;
     void Update()
     {
-        transform.position += new Vector3(0, 0, Time.deltaTime * speed);
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
 }

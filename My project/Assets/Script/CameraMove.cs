@@ -29,7 +29,7 @@ public class CameraMove : MonoBehaviour
         rotX = transform.localRotation.eulerAngles.x;
         rotY = transform.localRotation.eulerAngles.y;
 
-        dirNomalized = new Vector3(0.2f, 0.1f, -0.9f);
+        dirNomalized = new Vector3(0.4f, 0.1f, -0.9f);
         finalDistance = realCamera.localPosition.magnitude;
 
         Cursor.lockState = CursorLockMode.Locked;

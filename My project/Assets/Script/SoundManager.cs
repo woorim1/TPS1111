@@ -28,4 +28,29 @@ public class SoundManager : MonoBehaviour
 
         Destroy(go, clip.length);
     }
+
+    public void VFXPlay(GameObject particle, Vector3 position, float time)
+    {
+        GameObject effect = Instantiate(particle, position, Camera.main.transform.rotation);
+
+        Destroy(effect, time);
+    }
+
+    public void VFXPlay(GameObject particle, Vector3 position, float time, GameObject Parent)
+    {
+        GameObject effect = Instantiate(particle, position, Camera.main.transform.rotation, Parent.transform);
+
+        Destroy(effect, time);
+    }
+
+    public void VFXPlay(GameObject particle, Vector3 position, Transform target, float time)
+    {
+        Vector3 dir = target.transform.position - transform.position;
+
+        Quaternion rot = Quaternion.LookRotation(dir.normalized);
+
+        GameObject effect = Instantiate(particle, position, rot);
+
+        Destroy(effect, time);
+    }
 }
